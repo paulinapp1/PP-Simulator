@@ -2,7 +2,7 @@
 
 namespace Simulator
 {
-    internal class Creature
+    public abstract class Creature
     {
         private string name="Unknown";
         public string Name
@@ -60,10 +60,8 @@ namespace Simulator
 
         }
         public Creature() { }
-        public void SayHi()
-        {
-            Console.WriteLine($"Hi I'm {Name} and my level is {Level}");
-        }
+        public abstract void SayHi();
+       
         public void Upgrade()
         {
             if (Level < 10)
@@ -110,6 +108,6 @@ namespace Simulator
         {
             get { return $"{Name} [{Level}]"; }
         }
-
+        public abstract int Power { get; }
     }
 }
