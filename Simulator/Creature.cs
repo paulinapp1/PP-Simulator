@@ -10,28 +10,7 @@ namespace Simulator
             get { return name; }
             init
             {
-                var trimmed = value.Trim();
-                if (trimmed.Length < 3)
-                {
-                    trimmed = trimmed.PadRight(3, '#');
-                }
-                else if (trimmed.Length > 25)
-                {
-                    trimmed = trimmed.Substring(0, 25);
-                }
-                if (!char.IsUpper(trimmed[0]))
-                {
-                    trimmed = char.ToUpper(trimmed[0]) + trimmed.Substring(1); 
-                }
-                trimmed = trimmed.Trim();
-                if (trimmed.Length < 3)
-                {
-                    trimmed = trimmed.PadRight(3, '#');
-                }
-
-
-                name = trimmed;
-
+                name=Validator.Shortener(value, 3, 25, '#');
             }
         }
 
@@ -41,15 +20,7 @@ namespace Simulator
             get { return level; }
             init
             {
-                if (value < 1)
-                {
-                    value = 1;
-                }
-                else if (value > 10)
-                {
-                    value = 10;
-                }
-                level = value;
+               level= Validator.Limiter(value, 1, 10);
             }
         }
 
@@ -104,10 +75,12 @@ namespace Simulator
         }
 
 
-        public string Info
-        {
-            get { return $"{Name} [{Level}]"; }
-        }
+        public abstract string Info { get; }
+        
         public abstract int Power { get; }
+        public override string ToString()
+        {
+            return $"{GetType().Name.ToUpper()}: {Info}";
+        }
     }
 }

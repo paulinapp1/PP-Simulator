@@ -16,9 +16,7 @@ namespace Simulator
             get { return agility; }
             init
             {
-                if (value < 0) value = 0;
-                else if (value > 10) value = 10;
-                agility = value;
+               agility= Validator.Limiter(value, 0, 10);
             }
 
         }
@@ -46,7 +44,10 @@ namespace Simulator
          
         }
         public override int Power => 8 * Level + 2 * Agility;
-
+        public override string Info
+        {
+            get { return $"{Name} [{Level}][{Agility}]"; }
+        }
 
 
 
