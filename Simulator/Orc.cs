@@ -21,7 +21,6 @@ namespace Simulator
 
         public void Hunt() {
             counter++;
-            Console.WriteLine($"{Name}is hunting.");
             if (counter % 2 == 0)
             {
                 if (rage < 10) rage++;
@@ -32,9 +31,9 @@ namespace Simulator
         {
             Rage = rage;
         }
-        public override void SayHi() {
+        public override string Greeting() {
             
-            Console.WriteLine($"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}");
+            return $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}";
            
         }
         public override string Info

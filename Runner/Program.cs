@@ -1,6 +1,5 @@
 ﻿using Simulator.Maps;
 using System.Security.Cryptography.X509Certificates;
-
 namespace Simulator
 {
     internal class Program

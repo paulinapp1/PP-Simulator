@@ -31,7 +31,7 @@ namespace Simulator
 
         }
         public Creature() { }
-        public abstract void SayHi();
+        public abstract string Greeting();
        
         public void Upgrade()
         {
@@ -40,38 +40,25 @@ namespace Simulator
                 level++;
             }
         }
-        public void Go(Direction direction)
+        public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
+        
+        public string[] Go(Direction[] directions)
         {
-            switch (direction)
-            {
-                case Direction.Up:
-                    Console.WriteLine($"{Name} goes up");
-                    break;
-                case Direction.Right:
-                    Console.WriteLine($"{Name} goes right");
-                    break;
-                case Direction.Down:
-                    Console.WriteLine($"{Name} goes down");
-                    break;
-                case Direction.Left:
-                    Console.WriteLine($"{Name} goes left");
-                    break;
+            string[] results = new string[directions.Length];
 
-
-            }
-        }
-        public void Go(Direction[] directions)
-        {
-            foreach (Direction direction in directions)
+            for (int i = 0; i < directions.Length; i++)
             {
-                Go(direction);
+                results[i] = Go(directions[i]);
             }
+
+            return results;
+
         }
 
-        public void Go(string directionsString)
+        public string[] Go(string directionsString)
         {
             Direction[] directions = DirectionParser.Parse(directionsString);
-            Go(directions);
+            return Go(directions);
         }
 
 

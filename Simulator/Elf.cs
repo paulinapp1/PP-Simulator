@@ -23,7 +23,7 @@ namespace Simulator
 
         public void Sing() {
             counter++;
-            Console.WriteLine($"{Name} is singing.");
+         
             if (counter % 3 == 0)
             {
                 if (agility < 10) agility++;
@@ -37,10 +37,10 @@ namespace Simulator
         {
             Agility = agility;
         }
-        public override void SayHi()
+        public override string Greeting()
         {
             
-            Console.WriteLine($"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}");
+            return $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}";
          
         }
         public override int Power => 8 * Level + 2 * Agility;
