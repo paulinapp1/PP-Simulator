@@ -42,11 +42,11 @@ namespace Simulator
         }
         public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
         
-        public string[] Go(Direction[] directions)
+        public List<string> Go(List<Direction> directions)
         {
-            string[] results = new string[directions.Length];
+            List<string> results = new List<string>(directions.Count);
 
-            for (int i = 0; i < directions.Length; i++)
+            for (int i = 0; i < directions.Count; i++)
             {
                 results[i] = Go(directions[i]);
             }
@@ -55,9 +55,9 @@ namespace Simulator
 
         }
 
-        public string[] Go(string directionsString)
+        public List<string> Go(string directionsString)
         {
-            Direction[] directions = DirectionParser.Parse(directionsString);
+            List<Direction> directions = DirectionParser.Parse(directionsString);
             return Go(directions);
         }
 

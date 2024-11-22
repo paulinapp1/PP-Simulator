@@ -1,5 +1,7 @@
 ﻿
 
+using System.Drawing;
+
 namespace Simulator.Maps
 {
     /// <summary>
@@ -12,7 +14,27 @@ namespace Simulator.Maps
         /// </summary>
         /// <param name="p">Point to check.</param>
         /// <returns></returns>
-        public abstract bool Exist(Point p);
+        public int SizeX { get; }
+        public int SizeY { get; }
+        private Rectangle bounds;
+        protected Map(int sizeX, int sizeY)
+        {
+            if (this.SizeX < 5 || SizeY < 5)
+            {
+                throw new ArgumentOutOfRangeException(nameof(sizeX), "Mapa za mała");
+            }
+            this.SizeX = sizeX;
+            SizeY = sizeY;
+
+            bounds = new Rectangle(0, 0, this.SizeX-1, SizeY - 1);
+
+
+        }
+        /// 
+        public virtual bool Exist(Point p)
+        {
+            return bounds.Contains(p);
+        }
 
         /// <summary>
         /// Next position to the point in a given direction.

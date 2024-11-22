@@ -8,41 +8,31 @@ using System.Threading.Tasks;
 
 namespace Simulator.Maps
 {
-    public class SmallTorusMap : Map
+    public class SmallTorusMap : SmallMap
     {
-        public int Size { get; }
-        private Rectangle bounds;
-        public SmallTorusMap(int size)
-        {
-            if (size < 5 || size > 20)
-            {
-                throw new ArgumentOutOfRangeException("Nieprawidłowy rozmiar mapy");
-            }
-            else { 
-                Size = size;
-            bounds = new Rectangle(0, 0, Size-1, Size-1);
-        }
-            
 
-        }
-        public override bool Exist(Point p)
-        {
-            return bounds.Contains(p);
+        private readonly int sizeX;
+        private readonly int sizeY;
 
+
+        public SmallTorusMap(int sizeX, int sizeY) : base(sizeX, sizeY) {
+            this.sizeX = sizeX;
+            this.sizeY = sizeY;
         }
+        
 
         public override Point Next(Point p, Direction d)
         {
             switch (d)
             {
                 case Direction.Up:
-                    return new Point(p.X, (p.Y + 1) % Size);
+                    return new Point(p.X, (p.Y + 1) % sizeY);
                 case Direction.Down:
-                    return new Point(p.X, (p.Y - 1 + Size) % Size);
+                    return new Point(p.X, (p.Y - 1 + sizeY) % sizeY);
                 case Direction.Left:
-                    return new Point((p.X - 1 + Size) % Size, p.Y);
+                    return new Point((p.X - 1 + sizeX) % sizeX, p.Y);
                 case Direction.Right:
-                    return new Point((p.X + 1) % Size, p.Y);
+                    return new Point((p.X + 1) % sizeX, p.Y);
                 default:
                     throw new ArgumentException("Nieznany kierunek");
             }
@@ -53,13 +43,13 @@ namespace Simulator.Maps
             switch (d)
             {
                 case Direction.Up:
-                    return new Point((p.X + 1) % Size, (p.Y + 1) % Size);
+                    return new Point((p.X + 1) % sizeX, (p.Y + 1) % sizeY);
                 case Direction.Down:
-                    return new Point((p.X - 1 + Size) % Size, (p.Y - 1 + Size) % Size);
+                    return new Point((p.X - 1 + sizeX) % sizeX, (p.Y - 1 + sizeY) % sizeY);
                 case Direction.Left:
-                    return new Point((p.X - 1 + Size) % Size, (p.Y + 1) % Size);
+                    return new Point((p.X - 1 + sizeX) % sizeX, (p.Y + 1) % sizeY);
                 case Direction.Right:
-                    return new Point((p.X + 1) % Size, (p.Y - 1 + Size) % Size);
+                    return new Point((p.X + 1) % sizeX, (p.Y - 1 + sizeY) % sizeY);
                 default:
                     throw new ArgumentException("Nieznany kierunek");
             }
