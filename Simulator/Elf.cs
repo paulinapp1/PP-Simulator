@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Simulator
 {
-    internal class Elf : Creature
+    public class Elf : Creature
     {
         private int agility = 1;
         private int counter = 0;

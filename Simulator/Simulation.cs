@@ -1,6 +1,4 @@
-﻿
-
-using Simulator.Maps;
+﻿using Simulator.Maps;
 using Simulator;
 
 public class Simulation
@@ -54,7 +52,7 @@ public class Simulation
     /// number of starting positions.
     /// </summary>
     public Simulation(Map map, List<Creature> creatures,
-        List<Point> positions, string moves)
+    List<Point> positions, string moves)
     {
         if (creatures.Count == 0)
             throw new ArgumentException("The creatures list cannot be empty.");
@@ -66,6 +64,7 @@ public class Simulation
         Creatures = creatures;
         Positions = positions;
         Moves = moves;
+
         for (int i = 0; i < creatures.Count; i++)
         {
             var creature = creatures[i];
@@ -75,12 +74,12 @@ public class Simulation
             {
                 throw new ArgumentException($"Position {position} is outside the bounds of the map.");
             }
+            creature.SetMap(map, position);
 
-            map.Add(creature, position); 
-           
+            map.Add(creature, position);
         }
-
     }
+
 
     /// <summary>
     /// Makes one move of current creature in current direction.
@@ -88,7 +87,7 @@ public class Simulation
     /// </summary>
     public void Turn()
     {
-   
+
         if (Finished)
         {
             throw new InvalidOperationException("The simulation is already finished.");
@@ -110,7 +109,7 @@ public class Simulation
             return;
         }
 
-    
+
         var direction = directions[0];
         if (CurrentCreature != null)
         {

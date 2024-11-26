@@ -92,11 +92,12 @@ namespace Simulator.Maps
         {
             int x = position.X;
             int y = position.Y;
+            var newPosition = Next(position, direction);
 
             Remove(creature, position);
 
          
-            var newPosition = Next(position, direction);
+            
 
       
             Add(creature, newPosition);
