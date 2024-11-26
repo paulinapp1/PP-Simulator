@@ -1,10 +1,14 @@
 ﻿
 
+using Simulator.Maps;
+
 namespace Simulator
 {
     public abstract class Creature
     {
         private string name="Unknown";
+        public Map? Map { get; private set; }
+        public Point Position { get; private set; }
         public string Name
         {
             get { return name; }
@@ -40,26 +44,17 @@ namespace Simulator
                 level++;
             }
         }
-        public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
-        
-        public List<string> Go(List<Direction> directions)
+       
+      
+        public void Go(Direction direction)
         {
-            List<string> results = new List<string>(directions.Count);
-
-            for (int i = 0; i < directions.Count; i++)
-            {
-                results[i] = Go(directions[i]);
-            }
-
-            return results;
-
+            if (Map == null)
+                return; 
+            Point nextPosition = Map.Next(Position, direction);
+            Map.Move(this, Position, direction); 
+            Position = nextPosition;
         }
-
-        public List<string> Go(string directionsString)
-        {
-            List<Direction> directions = DirectionParser.Parse(directionsString);
-            return Go(directions);
-        }
+      
 
 
         public abstract string Info { get; }
