@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimConsole
 {
+
     public static class Box
     {
         public const char

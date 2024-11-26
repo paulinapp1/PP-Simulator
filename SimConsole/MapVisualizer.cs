@@ -12,7 +12,6 @@ namespace SimConsole
             _map = map;
         }
 
-
         public void Draw()
         {
           
