@@ -83,4 +83,4 @@ namespace SimConsole
 
 
     }
-}
+}// można zamienic na biblioteke linie 

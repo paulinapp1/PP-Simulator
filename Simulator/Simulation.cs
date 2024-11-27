@@ -13,7 +13,7 @@ public class Simulation
     /// <summary>
     /// Creatures moving on the map.
     /// </summary>
-    public List<Creature> Creatures { get; }
+    public List<IMappable> Creatures { get; }
 
     /// <summary>
     /// Starting positions of creatures.
@@ -39,7 +39,7 @@ public class Simulation
     /// <summary>
     /// Creature which will be moving current turn.
     /// </summary>
-    public Creature CurrentCreature => Creatures[turnIndex % Creatures.Count];
+    public IMappable CurrentCreature => Creatures[turnIndex % Creatures.Count];
 
     /// <summary>
     /// Lowercase name of direction which will be used in current turn.
@@ -60,6 +60,7 @@ public class Simulation
         }
     }
     private int turnIndex = 0;
+   
     /// <summary>
     /// Simulation constructor.
     /// Throw errors:
@@ -67,7 +68,7 @@ public class Simulation
     /// if number of creatures differs from 
     /// number of starting positions.
     /// </summary>
-    public Simulation(Map map, List<Creature> creatures,
+    public Simulation(Map map, List<IMappable> creatures,
         List<Point> positions, string moves)
     {
         if (creatures.Count == 0)
@@ -84,7 +85,8 @@ public class Simulation
         Creatures = creatures;
         Positions = positions;
         Moves = moves;
-
+        char moveChar = Moves[turnIndex];
+        var directions = DirectionParser.Parse(moveChar.ToString());
         for (int i = 0; i < creatures.Count; i++)
         {
             var creature = creatures[i];
@@ -115,7 +117,6 @@ public class Simulation
             Finished = true;
             return;
         }
-
         char moveChar = Moves[turnIndex];
         var directions = DirectionParser.Parse(moveChar.ToString());
 

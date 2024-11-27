@@ -18,7 +18,7 @@ namespace Simulator.Maps
         public int SizeX { get; }
         public int SizeY { get; }
         private Rectangle bounds;
-        protected abstract List<Creature>?[,] Fields { get;}
+        protected abstract List<IMappable>?[,] Fields { get;}
 
         protected Map(int sizeX, int sizeY)
         {
@@ -57,67 +57,18 @@ namespace Simulator.Maps
         /// <param name="d">Direction.</param>
         /// <returns>Next point.</returns>
         public abstract Point NextDiagonal(Point p, Direction d);
-        public void Add(Creature creature, Point position)
-        {
+        public abstract void Add(IMappable creature, Point position);
         
-            int x = position.X;
-            int y = position.Y;
 
-            if (Fields[x, y] == null)
-            {
-                Fields[x, y] = new List<Creature>();
-            }
+        public abstract void Remove(IMappable creature, Point position);
+       
 
-            Fields[x, y]!.Add(creature);
-        }
-
-        public void Remove(Creature creature, Point position)
-        {
-            int x = position.X;
-            int y = position.Y;
-
-            var creatures = Fields[x, y];
-            if (creatures != null)
-            {
-                creatures.RemoveAll(c => c == creature);
-
-                if (creatures.Count == 0)
-                {
-                    Fields[x, y] = null;
-                }
-            }
-        }
-
-        public void Move(Creature creature, Point position, Direction direction)
-        {
-            int x = position.X;
-            int y = position.Y;
-            var newPosition = Next(position, direction);
-
-            Remove(creature, position);
-
-         
-            
-
-      
-            Add(creature, newPosition);
-        }
-
-        public List<Creature> At(Point position)
-        {
-            int x = position.X;
-            int y = position.Y;
-
-            var creaturesAtPoint = new List<Creature>();
-
-            var creatures = Fields[x, y];
-            if (creatures != null)
-            {
-                creaturesAtPoint.AddRange(creatures);
-            }
-
-            return creaturesAtPoint;
-        }
+        public abstract void Move(IMappable creature, Point position, Direction direction);
+        
+        public abstract List<IMappable> At(Point position);
+        
+           
+        
 
     }
 }
