@@ -20,6 +20,7 @@ namespace Simulator
             }
 
         }
+        public override char Symbol => 'E';
 
         public void Sing() {
             counter++;

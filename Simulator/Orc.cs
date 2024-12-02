@@ -11,6 +11,7 @@ namespace Simulator
 
         private int rage=1;
         private int counter = 0;
+        public override char Symbol => 'O';
         public int Rage
         {
             get { return rage; }

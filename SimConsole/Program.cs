@@ -17,13 +17,14 @@ namespace SimConsole
             Console.WriteLine("Starting Simulator!\n");
             Console.WriteLine("Starting positions");
 
-            SmallSquareMap map = new(5);
-            List<IMappable> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
-            List<Point> points = [new(2, 2), new(3,1)];
-            string moves = "dlrludl";
-
-            Simulation simulation = new(map, creatures, points, moves);
+            SmallTorusMap map = new(8, 6);
+            List<IMappable> mappables = new() { new Orc("Gorbag"), new Elf("Elandor"),
+             new Animals("Kroliki", 8), new Birds("Orly", 14, true), new Birds("Strusie", 2, false) };
+            List<Point> points = new() { new(2, 2), new(3, 1), new(4, 4), new(2, 5), new(0, 0) };
+            string moves = "drulldrudldrlul";
+            Simulation simulation = new(map, mappables, points, moves);
             MapVisualizer mapVisualizer = new(simulation.Map);
+
 
             var move = 1;
             mapVisualizer.Draw();
