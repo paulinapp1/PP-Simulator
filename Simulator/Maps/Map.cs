@@ -18,7 +18,8 @@ namespace Simulator.Maps
         public int SizeX { get; }
         public int SizeY { get; }
         private Rectangle bounds;
-        protected abstract List<IMappable>?[,] Fields { get;}
+
+        private readonly Dictionary<Point, List<IMappable>> fields = new Dictionary<Point, List<IMappable>>();
 
         protected Map(int sizeX, int sizeY)
         {
@@ -57,19 +58,59 @@ namespace Simulator.Maps
         /// <param name="d">Direction.</param>
         /// <returns>Next point.</returns>
         public abstract Point NextDiagonal(Point p, Direction d);
-        public abstract void Add(IMappable creature, Point position);
-        
+        public  void Add(IMappable creature, Point position)
+        {
+            if (!fields.TryGetValue(position, out var creatures))
+            {
+                creatures = new List<IMappable>();
+                fields[position] = creatures;
+            }
 
-        public abstract void Remove(IMappable creature, Point position);
-       
+            creatures.Add(creature);
+        }
+        public  void Remove(IMappable creature, Point position)
+        {
+            if (fields.TryGetValue(position, out var creatures))
+            {
+                creatures.RemoveAll(c => c == creature);
 
-        public abstract void Move(IMappable creature, Point position, Direction direction);
-        
-        public abstract List<IMappable> At(Point position);
-        
-           
-        
+                if (creatures.Count == 0)
+                {
+                    fields.Remove(position);
+                }
+            }
+        }
 
+        public  void Move(IMappable creature, Point position, Direction direction)
+        {
+            Point newPosition = position;
+            if (creature is Birds bird && bird.CanFly)
+            {
+                newPosition = Next(position, direction);
+                newPosition = Next(newPosition, direction);
+            }
+            else
+            {
+                newPosition = Next(position, direction);
+            }
+
+            Remove(creature, position);
+
+            Add(creature, newPosition);
+        }
+
+        public  List<IMappable> At(Point position)
+        {
+            if (fields.TryGetValue(position, out var creatures))
+            {
+                return new List<IMappable>(creatures);
+            }
+
+            return new List<IMappable>();
+        }
     }
+
+
 }
+
  

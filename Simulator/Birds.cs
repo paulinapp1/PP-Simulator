@@ -28,16 +28,21 @@ namespace Simulator
         {
             if (Map == null)
             {
-                Console.WriteLine("Map is not set. The bird cannot move.");
+                Console.WriteLine("Nie ma mapy");
                 return;
             }
+            Point nextPosition;
+            if (CanFly)
+            {
+                nextPosition = Map.Next(Position, direction);
+                nextPosition = Map.Next(nextPosition, direction);
+            }
+            else
+            {
+                nextPosition = Map.NextDiagonal(Position, direction);
 
-           
-            Point nextPosition = CanFly ? Map.Next(Map.Next(Position, direction), direction)  : Map.NextDiagonal(Position, direction);            
-
-     
-            Map.Move(this, Position, direction);
-
+            }
+       
             Position = nextPosition;
         }
 
