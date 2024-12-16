@@ -46,18 +46,7 @@ public class Simulation
     /// </summary>
     public string CurrentMoveName
     {
-        get
-        {
-            char move = char.ToLower(Moves[turnIndex]);
-            switch (move)
-            {
-                case 'u': return "up";
-                case 'r': return "right";
-                case 'd': return "down";
-                case 'l': return "left";
-                default: return "";
-            }
-        }
+        get;
     }
     private int turnIndex = 0;
    
@@ -205,6 +194,7 @@ public class Simulation
         }
 
         turnIndex++;
+       
 
         if (turnIndex >= Moves.Length)
         {
