@@ -22,11 +22,19 @@ namespace SimConsole
             {
                 throw new ArgumentOutOfRangeException(nameof(turnIndex), "Turn index out of range.");
             }
+            Console.WriteLine($"Drawing turn {turnIndex}...");
+            Console.WriteLine($"Turn state: {Log.TurnLogs[turnIndex]}");
 
             var turnLog = Log.TurnLogs[turnIndex];
             int columns = Log.SizeX;
             int rows = Log.SizeY;
+            Console.WriteLine($"Drawing turn {turnIndex}: {turnLog.Symbols.Count} symbols");
 
+            // Wypisz symbole przed rysowaniem
+            foreach (var symbol in turnLog.Symbols)
+            {
+                Console.WriteLine($"Symbol {symbol.Value} at {symbol.Key}");
+            }
             Console.OutputEncoding = Encoding.UTF8;
 
             // Góra planszy

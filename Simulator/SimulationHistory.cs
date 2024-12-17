@@ -1,57 +1,42 @@
-﻿using Simulator.Maps;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Simulator;
 
-namespace Simulator
+public class SimulationHistory
 {
-    public class SimulationHistory
+    private Simulation _simulation { get; }
+    public int SizeX { get; }
+    public int SizeY { get; }
+    public List<SimulationTurnLog> TurnLogs { get; } = [];
+    // store starting positions at index 0
+
+    public SimulationHistory(Simulation simulation)
     {
-        private Simulation _simulation { get; }
-        public int SizeX { get; }
-        public int SizeY { get; }
-        public List<SimulationTurnLog> TurnLogs { get; } = [];
-        
+        _simulation = simulation ??
+            throw new ArgumentNullException(nameof(simulation));
+        SizeX = _simulation.Map.SizeX;
+        SizeY = _simulation.Map.SizeY;
+        Run();
+    }
 
-        public SimulationHistory(Simulation simulation)
+    private void Run()
+    {
+        while (!_simulation.Finished)
         {
-            _simulation = simulation ??
-                throw new ArgumentNullException(nameof(simulation));
-            SizeX = _simulation.Map.SizeX;
-            SizeY = _simulation.Map.SizeY;
+            _simulation.Turn();
 
-            Run();
-        }
-        private void Run()
-        {
-            if (_simulation == null)
+            var symbols = new Dictionary<Point, char>();
+            foreach (var mappable in _simulation.Creatures)
             {
-                throw new InvalidOperationException("Symulacja się nie rozpoczęła");
-
+                symbols[mappable.Position] = mappable.Symbol;
             }
 
-            while (!_simulation.Finished)
+            var log = new SimulationTurnLog
             {
-               _simulation.Turn();
-                var symbols = new Dictionary<Point, char>();
-                foreach (var creature in _simulation.Creatures)
-                {
-                    symbols[creature.Position] = creature.Symbol;
-                }
-                var turnLog = new SimulationTurnLog
-                {
-                    Mappable = _simulation.CurrentCreature.ToString(),
-                    Move = _simulation.CurrentMoveName,
-                    Symbols = symbols
-                };
+                Mappable = _simulation.CurrentCreature.ToString(),
+                Move = _simulation.CurrentMoveName,
+                Symbols = symbols
+            };
 
-                TurnLogs.Add(turnLog);
-
-            }
-
+            TurnLogs.Add(log);
         }
-
     }
 }

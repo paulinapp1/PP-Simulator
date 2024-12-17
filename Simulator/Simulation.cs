@@ -1,8 +1,5 @@
 ﻿using Simulator.Maps;
-using Simulator;
-
-
-
+namespace Simulator;
 public class Simulation
 {
     /// <summary>
@@ -27,29 +24,25 @@ public class Simulation
     /// When all creatures make moves, 
     /// next move is again for first creature and so on.
     /// </summary>
-    public string Moves { get; private set; }
+    public string Moves { get; }
 
     /// <summary>
     /// Has all moves been done?
     /// </summary>
     public bool Finished { get; private set; } = false;
-
-
+    private List<Direction> ParsedMoves { get; }
+    private int turnIndex = 0;
 
     /// <summary>
-    /// Creature which will be moving current turn.
+    /// Icreature which will be moving current turn.
     /// </summary>
     public IMappable CurrentCreature => Creatures[turnIndex % Creatures.Count];
 
     /// <summary>
     /// Lowercase name of direction which will be used in current turn.
     /// </summary>
-    public string CurrentMoveName
-    {
-        get;
-    }
-    private int turnIndex = 0;
-   
+    public string CurrentMoveName => ParsedMoves.Count > turnIndex ? ParsedMoves[turnIndex].ToString().ToLower() : string.Empty;
+
     /// <summary>
     /// Simulation constructor.
     /// Throw errors:
@@ -57,25 +50,34 @@ public class Simulation
     /// if number of creatures differs from 
     /// number of starting positions.
     /// </summary>
-    public Simulation(Map map, List<IMappable> creatures,
-        List<Point> positions, string moves)
+    public Simulation(Map map, List<IMappable> creatures, List<Point> positions, string moves)
     {
-        if (creatures.Count == 0)
+        if (creatures == null || creatures.Count == 0)
         {
-            throw new ArgumentException("The creatures list cannot be empty.");
+            throw new ArgumentException("List of creatures cannot be empty.");
         }
 
         if (creatures.Count != positions.Count)
         {
-            throw new ArgumentException("The number of creatures must match the number of starting positions.");
+            throw new ArgumentException("Number of creatures must match the number of starting positions.");
         }
 
-        Map = map;
+        Map = map ?? throw new ArgumentNullException(nameof(map));
         Creatures = creatures;
         Positions = positions;
-        Moves = moves;
-        char moveChar = Moves[turnIndex];
-        var directions = DirectionParser.Parse(moveChar.ToString());
+        Moves = moves ?? throw new ArgumentNullException(nameof(moves));
+
+        ParsedMoves = Moves
+            .Select(c => DirectionParser.Parse(c.ToString().ToLower()))
+            .Where(d => d != null && d.Count > 0)
+            .Select(d => d[0])
+            .ToList();
+
+        if (ParsedMoves.Count == 0)
+        {
+            throw new ArgumentException("Moves must contain at least one valid direction.");
+        }
+
         for (int i = 0; i < creatures.Count; i++)
         {
             var creature = creatures[i];
@@ -89,7 +91,6 @@ public class Simulation
             map.Add(creature, position);
         }
     }
-
     /// <summary>
     /// Makes one move of current creature in current direction.
     /// Throw error if simulation is finished.
@@ -100,106 +101,17 @@ public class Simulation
         {
             throw new InvalidOperationException("The simulation is already finished.");
         }
-
-        if (Moves.Length == 0)
+        if (turnIndex >= ParsedMoves.Count)
         {
             Finished = true;
             return;
         }
-
-        char moveChar = Moves[turnIndex];
-        var directions = DirectionParser.Parse(moveChar.ToString());
-
-        if (directions != null && directions.Count > 0)
-        {
-            var direction = directions[0];
-            var creature = CurrentCreature;
-
-            var currentIndex = turnIndex % Positions.Count;
-            var currentPosition = Positions[currentIndex];
-
-            Point newPosition = currentPosition;
-
-            if (creature is Birds bird && bird.CanFly)
-            {
-           
-                newPosition = Map.Next(currentPosition, direction);
-                newPosition = Map.Next(newPosition, direction); 
-
-            
-                if (!Map.Exist(newPosition))
-                {
-                    switch (direction)
-                    {
-                        case Direction.Up: direction = Direction.Down; break;
-                        case Direction.Down: direction = Direction.Up; break;
-                        case Direction.Left: direction = Direction.Right; break;
-                        case Direction.Right: direction = Direction.Left; break;
-                        default: break;
-                    }
-
-           
-                    newPosition = Map.Next(currentPosition, direction);
-                    newPosition = Map.Next(newPosition, direction); 
-
-                  
-                    if (!Map.Exist(newPosition))
-                    {
-                        Map.Remove(creature, currentPosition);
-                        Positions.RemoveAt(currentIndex);
-                        Creatures.RemoveAt(currentIndex);
-                        turnIndex--;
-                        if (Creatures.Count == 0) Finished = true;
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                // Normalny ruch dla innych stworów
-                newPosition = Map.Next(currentPosition, direction);
-
-                // Odbicie w przypadku wyjścia poza mapę
-                if (!Map.Exist(newPosition))
-                {
-                    switch (direction)
-                    {
-                        case Direction.Up: direction = Direction.Down; break;
-                        case Direction.Down: direction = Direction.Up; break;
-                        case Direction.Left: direction = Direction.Right; break;
-                        case Direction.Right: direction = Direction.Left; break;
-                        default: break;
-                    }
-
-                    newPosition = Map.Next(currentPosition, direction);
-
-                    if (!Map.Exist(newPosition))
-                    {
-                        Map.Remove(creature, currentPosition);
-                        Positions.RemoveAt(currentIndex);
-                        Creatures.RemoveAt(currentIndex);
-                        turnIndex--;
-                        if (Creatures.Count == 0) Finished = true;
-                        return;
-                    }
-                }
-            }
-
-            // Przemieszczamy stworzenie
-            Map.Remove(creature, currentPosition);
-            Map.Add(creature, newPosition);
-
-            // Zaktualizowanie pozycji w liście
-            Positions[currentIndex] = newPosition;
-        }
-
+        Direction direction = ParsedMoves[turnIndex];
+        CurrentCreature.Go(direction);
         turnIndex++;
-       
-
-        if (turnIndex >= Moves.Length)
+        if (turnIndex >= ParsedMoves.Count)
         {
             Finished = true;
         }
     }
-
 }

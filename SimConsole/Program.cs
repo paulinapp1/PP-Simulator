@@ -13,11 +13,10 @@ namespace SimConsole
 
         static void Main()
         {
-           
+
 
 
             BigBounceMap map = new BigBounceMap(8, 6);
-
             List<IMappable> mappables = new List<IMappable>
         {
             new Orc("Gorbag"),
@@ -26,26 +25,22 @@ namespace SimConsole
             new Birds("Orly", 14, true),
             new Birds("Strusie", 2, false)
         };
-
             List<Point> points = new List<Point>
         {
-            //new Point(2, 2),
-            //new Point(3, 1),
-            //new Point(4, 4),
-            //new Point(2, 5),
-            //new Point(0, 0)
-            new Point(0,0), new Point(0,1), new Point(0,2), new Point(0,3), new Point(0,4)
+            new Point(2, 2),
+            new Point(3, 1),
+            new Point(4, 4),
+            new Point(2, 5),
+            new Point(0, 0)
         };
-
-            //string moves = "drulldrudldrlu";
-            string moves = "rrrrrrrrrrrrrrrrrrrr";
-            Simulation simulation = new(map, mappables, points, moves);
-            MapVisualizer mapVisualizer = new(simulation.Map);
+            string moves = "drulldrudldrlul";
+            Simulation simulation = new Simulation(map, mappables, points,moves);
+            MapVisualizer mapVisualizer = new MapVisualizer(simulation.Map);
             SimulationHistory history = new(simulation);
             LogVisualizer logVisualizer = new(history);
             int move = 1;
-
             mapVisualizer.Draw();
+            
 
 
             while (!simulation.Finished)
@@ -66,8 +61,8 @@ namespace SimConsole
 
             Console.WriteLine("\nSimulation finished!");
             logVisualizer.Draw(3);
-            Console.ReadKey(true);
-            logVisualizer.Draw(5);
+           Console.ReadKey(true);
+           logVisualizer.Draw(5);
         }
     }
 }
