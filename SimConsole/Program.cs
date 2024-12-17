@@ -11,8 +11,10 @@ namespace SimConsole
     {
 
 
-        static void Main(string[] args)
+        static void Main()
         {
+           
+
 
             BigBounceMap map = new BigBounceMap(8, 6);
 
@@ -27,19 +29,20 @@ namespace SimConsole
 
             List<Point> points = new List<Point>
         {
-            new Point(2, 2),
-            new Point(3, 1),
-            new Point(4, 4),
-            new Point(2, 5),
-            new Point(0, 0)
+            //new Point(2, 2),
+            //new Point(3, 1),
+            //new Point(4, 4),
+            //new Point(2, 5),
+            //new Point(0, 0)
+            new Point(0,0), new Point(0,1), new Point(0,2), new Point(0,3), new Point(0,4)
         };
 
-            string moves = "drulldrudldrlul";
-
-
-            Simulation simulation = new Simulation(map, mappables, points, moves);
-            MapVisualizer mapVisualizer = new MapVisualizer(simulation.Map);
-
+            //string moves = "drulldrudldrlu";
+            string moves = "rrrrrrrrrrrrrrrrrrrr";
+            Simulation simulation = new(map, mappables, points, moves);
+            MapVisualizer mapVisualizer = new(simulation.Map);
+            SimulationHistory history = new(simulation);
+            LogVisualizer logVisualizer = new(history);
             int move = 1;
 
             mapVisualizer.Draw();
@@ -49,17 +52,22 @@ namespace SimConsole
             {
                 Console.WriteLine("Press any key to proceed to the next turn...");
                 Console.ReadKey(true);
-
+              
                 Console.WriteLine($"Tura {move}");
                 Console.Write($"Mappable goes {simulation.CurrentMoveName}\n");
 
-               
+
                 simulation.Turn();
 
 
                 mapVisualizer.Draw();
                 move++;
             }
+
+            Console.WriteLine("\nSimulation finished!");
+            logVisualizer.Draw(3);
+            Console.ReadKey(true);
+            logVisualizer.Draw(5);
         }
     }
 }

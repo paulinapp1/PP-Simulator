@@ -21,9 +21,7 @@ namespace Simulator
                 throw new ArgumentNullException(nameof(simulation));
             SizeX = _simulation.Map.SizeX;
             SizeY = _simulation.Map.SizeY;
-            Console.WriteLine("Initial state of the simulation:");
-            Console.WriteLine($"Finished: {_simulation.Finished}");
-            Console.WriteLine($"Moves length: {_simulation.Moves.Length}");
+
             Run();
         }
         private void Run()
