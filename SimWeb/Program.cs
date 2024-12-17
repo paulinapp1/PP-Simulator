@@ -1,26 +1,32 @@
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+
+// Dodajemy Razor Pages
 builder.Services.AddRazorPages();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+
 var app = builder.Build();
+
+// W³¹czamy obs³ugê sesji
 app.UseSession();
-// Configure the HTTP request pipeline.
+
+// Ustawienia dla œrodowiska produkcyjnego
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
+// Mapowanie Razor Pages
 app.MapRazorPages();
 
 app.Run();

@@ -1,0 +1,60 @@
+﻿@page
+@model SimulationModel
+@{
+    ViewData["Title"] = "Simulation page";
+}
+
+<body>
+    <main>
+        <div class="map-header">
+            <form method="post" asp-page-handler="Previous">
+                <button type="submit">&larr;</button>
+                @Html.AntiForgeryToken()
+            </form>
+
+          
+            <div class="turn">
+                Tura @Model.CurrentTurn
+            </div>
+
+            <form method="post" asp-page-handler="Next">
+                <button type="submit">&rarr;</button>
+                @Html.AntiForgeryToken()
+            </form>
+        </div>
+
+        <div class="map">
+       
+            <div class="column-labels">
+                @for (int col = 0; col < 8; col++)
+                {
+                    <div class="col-label">@col</div>
+                }
+            </div>
+
+    
+            @for (int row = 5; row >= 0; row--)
+            {
+                <div class="map-row">
+                
+                    <div class="row-label">@row</div>
+
+                  
+                    @foreach (var cell in Model.MapGrid[row])
+                    {
+                        <div class="cell">
+                            @if (cell.Creatures != null && cell.Creatures.Any())
+                            {
+                                @Html.Raw(Model.GetImageSource(cell.Creatures))
+                            }
+                            else
+                            {
+                                <div></div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </main>
+</body>

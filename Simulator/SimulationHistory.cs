@@ -6,7 +6,7 @@ public class SimulationHistory
     public int SizeX { get; }
     public int SizeY { get; }
     public List<SimulationTurnLog> TurnLogs { get; } = [];
-    // store starting positions at index 0
+   
 
     public SimulationHistory(Simulation simulation)
     {
@@ -23,10 +23,14 @@ public class SimulationHistory
         {
             _simulation.Turn();
 
-            var symbols = new Dictionary<Point, char>();
+            var symbols = new Dictionary<Point, List<char>>();
             foreach (var mappable in _simulation.Creatures)
             {
-                symbols[mappable.Position] = mappable.Symbol;
+                if (!symbols.ContainsKey(mappable.Position))
+                {
+                    symbols[mappable.Position] = new List<char>();
+                }
+                symbols[mappable.Position].Add(mappable.Symbol);
             }
 
             var log = new SimulationTurnLog
