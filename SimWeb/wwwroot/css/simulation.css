@@ -1,93 +1,51 @@
-﻿/* Kolory różowe */
-:root {
-    --accent-color: #ff66b2;
-    --light-color: #ffe6f1;
-    --dark-color: #d6336c; 
-}
-
-
-.map {
+﻿.map {
     display: grid;
-    grid-template-columns: repeat(8, 1fr); 
-    grid-template-rows: repeat(6, 1fr); 
-    gap: 0; 
-    justify-items: center; 
-    align-items: center; 
-    min-width: 600px; 
-    position: relative;
-}
-
-
-.cell {
-    background-color: #ff80bf; 
-    outline: 1px solid var(--dark-color); 
-    display: flex;
+    gap: 0;
     justify-content: center;
+    min-width: max-content;
     align-items: center;
-    border-radius: 4px;
-    min-width: 70px;
-    height: 70px; 
-    flex-wrap: wrap; 
 }
 
-.map img {
-    width: 50px; 
-    height: 50px; 
-    object-fit: contain; 
-    margin: 2px; 
-}
+    .map > div {
+        background-color: #d6336c;
+        outline: 1px dashed #112d4e;
+        min-width: 80px;
+        aspect-ratio: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
+    .map > p {
+        padding-right: .4rem;
+    }
+
+    .map > span {
+        padding-top: .2rem;
+    }
 
 .map-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 1rem;
     font-weight: 700;
     text-align: center;
     font-size: 1.2rem;
     margin-left: 1rem;
-    color: var(--dark-color); 
 }
 
 .turn {
     min-width: 11rem;
-    color: var(--dark-color); 
 }
-
-
-.column-labels {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.col-label {
-    padding-top: 0.2rem;
-    color: var(--dark-color); 
-    margin: 0 0.4rem;
-    font-weight: bold;
-}
-
-.row-label {
-    color: var(--dark-color);
-    font-weight: bold;
-    padding-right: 0.5rem;
-    text-align: right;
-}
-
 
 button {
     min-width: 4rem;
     min-height: 3rem;
     font-size: 1.6rem;
-    background-color: var(--accent-color); 
-    color: white; 
-    border: none;
-    border-radius: 8px; 
-    cursor: pointer;
 }
 
-    button:hover {
-        background-color: #ff3385; 
-    }
+img {
+    max-width: 4rem;
+    max-height: 4rem;
+}
